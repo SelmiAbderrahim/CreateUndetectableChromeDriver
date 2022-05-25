@@ -5,6 +5,7 @@ import platform
 import subprocess
 import re
 import zipfile
+from pathlib import Path
 from bs4 import BeautifulSoup
 from termcolor import colored
 from colorama import init
@@ -15,6 +16,7 @@ from .utils import Util
 OSNAME = platform.system()
 init()
 util = Util()
+DRIVER = Path(__file__).resolve().absolute().parent / "driver"
 
 
 class Download:
@@ -113,7 +115,7 @@ class Download:
         chrome_file_name = chrome_driver_file.split("/")[1]
         with requests.get(download_link, stream=True, headers=headers) as r:
             print("downloading " + colored(f"{chrome_file_name}", "blue") + " ...")
-            with open(os.path.join("driver", chrome_file_name), "wb") as f:
+            with open(os.path.join(DRIVER, chrome_file_name), "wb") as f:
                 shutil.copyfileobj(r.raw, f)
 
         return chrome_driver_file
@@ -121,11 +123,11 @@ class Download:
     def extract_chrome_driver_zip(self, chrome_driver_file):
         global filename
         chrome_file_name = chrome_driver_file.split("/")[1]
-        path = os.path.join("driver", chrome_file_name)
+        path = os.path.join(DRIVER, chrome_file_name)
         with zipfile.ZipFile(path, "r") as zip_ref:
-            zip_ref.extractall("driver")
+            zip_ref.extractall(DRIVER)
             filename = zip_ref.namelist()[0]
         os.remove(path)
         print(colored("[+]", "green") + " Chrome driver has been installed.")
-        util.update_chrome_driver_config(chromedriver=os.path.join("driver", filename))
+        util.update_chrome_driver_config(chromedriver=os.path.join(DRIVER, filename))
         return filename

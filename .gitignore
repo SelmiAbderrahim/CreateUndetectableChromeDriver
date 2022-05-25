@@ -1,6 +1,6 @@
-__pycache__
+driver/__pycache__
 env
-driver
+lucd/driver
 *.log
 requirements.txt
 dist

@@ -1,13 +1,17 @@
 import json
 import os
 import platform
+from pathlib import Path
+
+
+DRIVER = Path(__file__).resolve().absolute().parent / "driver"
 
 
 class Util:
     def create_chrome_driver_config(self):
-        if not os.path.isdir("driver"):
-            os.mkdir("driver")
-        config_file = os.path.join("driver", "config.json")
+        if not os.path.isdir(DRIVER):
+            os.mkdir(DRIVER)
+        config_file = os.path.join(DRIVER, "config.json")
         if not os.path.isfile(config_file):
             with open(config_file, "w") as config:
                 data = {
