@@ -1,6 +1,7 @@
 from termcolor import colored
 from colorama import init
-
+import os
+import subprocess
 
 from .check import get_installed_chrome_path
 
@@ -40,6 +41,7 @@ class Clean:
                 break
 
     def remove_signature_in_javascript(self):
+        subprocess.Popen(["sudo", "chmod", "755", self.chromedriver], stdout=subprocess.PIPE)
         with open(self.chromedriver, "r", errors="ignore") as chrome:
             content = chrome.read()
         content = content.replace("cdc_", "tch_")   

@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 import random
+import subprocess
 from fake_useragent import UserAgent
 import sys
 from termcolor import colored
@@ -12,7 +13,6 @@ from .check import get_installed_chrome_path
 from .clean import Clean
 
 
-ua = UserAgent()
 clean = Clean()
 
 
@@ -20,8 +20,9 @@ class Driver:
 
     def generate_user_agent(self):
         try:
+            ua = UserAgent()
             user_agent = ua['google chrome']
-        except:
+        except IndexError:
             user_agent = random.choice([          
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
@@ -30,8 +31,8 @@ class Driver:
         return user_agent
 
     def create_driver(self, headless=False, profile_path="", mute=False):
-        clean.remove_signature_in_javascript()
         path = get_installed_chrome_path()
+        clean.remove_signature_in_javascript()
         if path is not None:
             options = webdriver.ChromeOptions()
             options.headless = headless

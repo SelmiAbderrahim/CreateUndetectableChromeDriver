@@ -48,6 +48,6 @@ Tested on:
 
 ✅ Windows
 
-❌ Linux
+✅ Linux
 
 ❌ Mac

@@ -4,6 +4,7 @@ import os
 import platform
 import subprocess
 import re
+import time
 import zipfile
 from pathlib import Path
 from bs4 import BeautifulSoup
@@ -44,9 +45,6 @@ class Download:
                     .stdout.read()
                     .decode("utf-8")
                 )
-                installed_chrome_version = re.findall(
-                    r"([\d]+\.[\d]+\.[\d]+\.[\d]+)", cmd_version_output
-                )[0].split(".")[0]
             elif OSNAME == "Linux":
                 cmd_version_output = (
                     subprocess.Popen(
@@ -55,11 +53,6 @@ class Download:
                     .stdout.read()
                     .decode("utf-8")
                 )
-                installed_chrome_version = [
-                    word[0:2]
-                    for word in cmd_version_output.split()
-                    if "." in word and "9" in word
-                ][0]
             elif OSNAME == "Darwin":
                 cmd_version_output = (
                     subprocess.Popen(
@@ -70,11 +63,6 @@ class Download:
                     .stdout.read()
                     .decode("utf-8")
                 )
-                installed_chrome_version = [
-                    word[0:2]
-                    for word in cmd_version_output.split()
-                    if "." in word and "9" in word
-                ][0]
         except Exception as error:
             print(
                 colored("X [Error]", "red")
@@ -83,6 +71,9 @@ class Download:
             print(f"--> {error}")
             return None
         else:
+            installed_chrome_version = re.findall(
+                    r"([\d]+\.[\d]+\.[\d]+\.[\d]+)", cmd_version_output
+                )[0].split(".")[0]
             print(
                 colored("[+]", "green")
                 + " You have Chrome version "
@@ -117,7 +108,7 @@ class Download:
             print("downloading " + colored(f"{chrome_file_name}", "blue") + " ...")
             with open(os.path.join(DRIVER, chrome_file_name), "wb") as f:
                 shutil.copyfileobj(r.raw, f)
-
+        
         return chrome_driver_file
 
     def extract_chrome_driver_zip(self, chrome_driver_file):
@@ -129,5 +120,8 @@ class Download:
             filename = zip_ref.namelist()[0]
         os.remove(path)
         print(colored("[+]", "green") + " Chrome driver has been installed.")
-        util.update_chrome_driver_config(chromedriver=os.path.join(DRIVER, filename))
+        chromedriver_path = os.path.join(DRIVER, filename)
+        util.update_chrome_driver_config(chromedriver=chromedriver_path)
+        
+
         return filename
