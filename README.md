@@ -17,9 +17,13 @@ This program will download a Chrome driver that you can use for your Python Sele
 ## Installation
 
 ```
-
 $ pip install lucd 
+```
 
+or
+
+```
+$ pip install git+https://github.com/SelmiAbderrahim/CreateUndetectableChromeDriver
 ```
 
 ## Usage

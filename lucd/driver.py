@@ -54,9 +54,13 @@ class Driver:
             options.add_experimental_option("prefs",prefs)
             webdriver.DesiredCapabilities.CHROME['loggingPrefs'] = {'driver': 'OFF', 'server': 'OFF', 'browser': 'OFF'}
             try:
-                driver = webdriver.Chrome(service=Service(path), options=options)
-            except TypeError:
                 driver = webdriver.Chrome(executable_path=path, options=options)
-            return driver
+            except TypeError:
+                driver = webdriver.Chrome(service=Service(path), options=options)
+            except Exception as error:
+                sys.exit(colored("[-] ", "red")+f" {error}")
+            else:
+                driver.get("https://selmi.tech")
+                return driver
         else:
             sys.exit(colored(f"Make sure you have chrome installed on your machine!", "red"))

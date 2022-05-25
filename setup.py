@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.3' 
+VERSION = '0.0.1' 
 DESCRIPTION = 'Create Local Undetectable Chrome Driver'
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -14,7 +14,6 @@ setup(
         description=DESCRIPTION,
         long_description=long_description,
         long_description_content_type="text/markdown",
-        packages=find_packages(),
         url='https://github.com/SelmiAbderrahim/CreateUndetectableChromeDriver',
         install_requires=[
             "beautifulsoup4==4.11.1",

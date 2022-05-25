@@ -1,4 +1,5 @@
 lucd/__pycache__
+__pycache__
 env
 lucd/driver
 *.log
