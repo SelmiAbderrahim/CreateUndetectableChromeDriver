@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.8' 
+VERSION = '0.0.9' 
 DESCRIPTION = 'Create Local Undetectable Chrome Driver'
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
