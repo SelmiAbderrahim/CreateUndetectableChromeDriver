@@ -32,7 +32,8 @@ class Driver:
 
     def create_driver(self, headless=False, profile_path="", mute=False):
         path = get_installed_chrome_path()
-        clean.remove_signature_in_javascript()
+        if not path:
+            clean.remove_signature_in_javascript()
         if path is not None:
             options = webdriver.ChromeOptions()
             options.headless = headless
