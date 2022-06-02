@@ -1,3 +1,4 @@
+*build*
 lucd/__pycache__
 __pycache__
 env
@@ -6,4 +7,3 @@ lucd/driver
 requirements.txt
 dist
 *.egg-info
-build
