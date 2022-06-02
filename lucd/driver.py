@@ -1,20 +1,22 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 import random
-import subprocess
+import os
+import platform
 from fake_useragent import UserAgent
 import sys
 from termcolor import colored
 from colorama import init
 init()
-
+# import Keys
+from selenium.webdriver.common.keys import Keys
 
 from .check import get_installed_chrome_path
 from .clean import Clean
-
+from .utils import Util
 
 clean = Clean()
-
+util = Util()
 
 class Driver:
 
@@ -30,7 +32,34 @@ class Driver:
             ])
         return user_agent
 
-    def create_driver(self, headless=False, profile_path="", mute=False):
+    def open_new_cmd_and_run_command(self, profile_path="", port=9222, default_profile=False):
+        """
+        This function opens a new cmd window and runs the command
+        a command that runs the Chrome driver in the debugging mode
+        """
+        system = platform.system()
+        pwd = os.getcwd()
+        if not profile_path and not default_profile:
+            profile_path = pwd + f"/profile{random.randint(1,100)}"
+        if profile_path and system == 'Windows':
+            profile_path = profile_path.replace('/', '\\') if "/" in profile_path else profile_path
+        if default_profile:
+            command = f"chrome.exe -remote-debugging-port={port}"
+        else:
+            command = f'chrome.exe --remote-debugging-port={port} --user-data-dir="{profile_path}"'
+        if system == 'Windows':
+            os.system('start cmd /k ' + command)
+        else:
+            google = util.whereis_google_chrome()
+            if not google:
+                raise Exception("whereis: Google Chrome is not installed")
+            if default_profile:
+                command = f'{google} --remote-debugging-port={port}'
+            else:
+                command = f'{google} --remote-debugging-port={port} --user-data-dir="{profile_path}"'
+            os.system(f'gnome-terminal -- bash -c "{command}"')
+
+    def create_driver(self, headless=False, profile_path="", mute=False, debugging=False, default_profile=False, debug_port=9222):
         path = get_installed_chrome_path()
         if not path:
             clean.remove_signature_in_javascript()
@@ -39,22 +68,25 @@ class Driver:
             options.headless = headless
             if profile_path:
                 options.add_argument(r"--user-data-dir=%s" % profile_path)
-            options.add_argument("--start-maximized")
-            options.add_argument("--log-level=3")
-            options.add_experimental_option(
-                "excludeSwitches", ["enable-automation", "enable-logging"])
-            options.add_experimental_option('useAutomationExtension', False)
-            options.add_experimental_option(
-                'prefs', {'intl.accept_languages': 'en_US,en'})
-            options.add_argument(f"user-agent={self.generate_user_agent()}")
-            if mute:
-                options.add_argument("--mute-audio")
-                options.add_argument('--no-sandbox')
-            options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--disable-features=UserAgentClientHint')
-            prefs = {"profile.default_content_setting_values.notifications" : 2}
-            options.add_experimental_option("prefs",prefs)
-            webdriver.DesiredCapabilities.CHROME['loggingPrefs'] = {'driver': 'OFF', 'server': 'OFF', 'browser': 'OFF'}
+            if debugging:
+                self.open_new_cmd_and_run_command(profile_path=profile_path, port=debug_port, default_profile=default_profile)
+                options.add_experimental_option("debuggerAddress", f"127.0.0.1:{debug_port}")
+            else:
+                options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])
+                options.add_argument("--start-maximized")
+                options.add_argument("--log-level=3")
+                options.add_experimental_option('useAutomationExtension', False)
+                options.add_experimental_option(
+                    'prefs', {'intl.accept_languages': 'en_US,en'})
+                options.add_argument(f"user-agent={self.generate_user_agent()}")
+                if mute:
+                    options.add_argument("--mute-audio")
+                    options.add_argument('--no-sandbox')
+                options.add_argument('--disable-dev-shm-usage')
+                options.add_argument('--disable-features=UserAgentClientHint')
+                prefs = {"profile.default_content_setting_values.notifications" : 2}
+                options.add_experimental_option("prefs",prefs)
+                webdriver.DesiredCapabilities.CHROME['loggingPrefs'] = {'driver': 'OFF', 'server': 'OFF', 'browser': 'OFF'}
             try:
                 driver = webdriver.Chrome(executable_path=path, options=options)
             except TypeError:

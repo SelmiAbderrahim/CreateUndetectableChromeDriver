@@ -2,7 +2,7 @@ import json
 import os
 import platform
 from pathlib import Path
-
+import subprocess
 
 DRIVER = Path(__file__).resolve().absolute().parent / "driver"
 
@@ -31,3 +31,13 @@ class Util:
             config_data["chromedriver"] = chromedriver
         with open(config_file, "w") as config:
             config.write(json.dumps(config_data))
+
+    def whereis_google_chrome(self):
+        """
+        Get the path of the chrome driver
+        """
+        try:
+            chrome_path = subprocess.check_output(['whereis', 'google-chrome']).decode('utf-8').strip().split()[1]
+        except:
+            return False
+        return chrome_path
