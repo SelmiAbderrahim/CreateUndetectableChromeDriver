@@ -61,6 +61,7 @@ class Driver:
 
     def create_driver(self, headless=False, profile_path="", mute=False, debugging=False, default_profile=False, debug_port=9222):
         path = get_installed_chrome_path()
+        os.chmod(path, 755)
         if not path:
             clean.remove_signature_in_javascript()
         if path is not None:
