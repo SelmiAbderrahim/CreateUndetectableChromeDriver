@@ -2,7 +2,7 @@
 
 This program will download a Chrome driver that you can use for your Python Selenium code.
 
-## Features
+## What it does:
 
 - Download the exact chrome driver based on your OS and installed chrome version.
 
@@ -13,6 +13,16 @@ This program will download a Chrome driver that you can use for your Python Sele
 - Set User-Agent
 
 - Use maximum resolution
+
+- Open Chrome Instance on debugging mode
+
+- Control an existing Chrome instance.
+
+- Unmute the sounds of the browser.
+
+- Save/ load Chrome profiles.
+
+- Run Chrome driver on headless mode.
 
 ## Installation
 
@@ -46,8 +56,12 @@ chrome.get("https://selmi.tech")
 
 Tested on:
 
-✅ Windows
+        ✅ Windows
 
-✅ Linux
+        ✅ Linux
 
-❌ Mac
+        ❌ Mac
+
+---
+
+### [Documentation](https://selmi.tech/blog/post/lucd-how-to-create-undetectable-selenium-chrome-driver-python167977)
