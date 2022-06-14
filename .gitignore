@@ -7,4 +7,3 @@ lucd/driver
 requirements.txt
 dist
 *.egg-info
-setup.py
