@@ -1,6 +1,11 @@
 # Create Local Undetectable Chrome Driver (LUCD)
 
-This program will download a Chrome driver that you can use for your Python Selenium code.
+This program will download and patch a Chrome driver to make it undetectable. So that you can use an undetectable Chrome driver for your Python Selenium code.
+
+
+## Passed the antibot test [](https://bot.sannysoft.com)
+
+![](screenshots/antibot-tested.png)
 
 ## What it does:
 

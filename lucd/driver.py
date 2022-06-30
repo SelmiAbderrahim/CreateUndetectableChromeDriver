@@ -32,6 +32,30 @@ class Driver:
             ])
         return user_agent
 
+    def driver_navigator(self, driver):
+        if driver.execute_script("return navigator.webdriver"):
+            driver.execute_cdp_cmd(
+                    "Page.addScriptToEvaluateOnNewDocument",
+                    {
+                        "source": """
+
+                                Object.defineProperty(window, 'navigator', {
+                                    value: new Proxy(navigator, {
+                                    has: (target, key) => (key === 'webdriver' ? false : key in target),
+                                    get: (target, key) =>
+                                        key === 'webdriver'
+                                        ? undefined
+                                        : typeof target[key] === 'function'
+                                        ? target[key].bind(target)
+                                        : target[key]
+                                    })
+                                });
+                                    
+                                                            
+                        """
+                    },
+                )
+
     def open_new_cmd_and_run_command(self, profile_path="", port=9222, default_profile=False):
         """
         This function opens a new cmd window and runs the command
@@ -84,11 +108,9 @@ class Driver:
                 if mute:
                     options.add_argument("--mute-audio")
                     options.add_argument('--no-sandbox')
-                options.add_argument('--disable-dev-shm-usage')
-                options.add_argument('--disable-features=UserAgentClientHint')
-                prefs = {"profile.default_content_setting_values.notifications" : 2}
-                options.add_experimental_option("prefs",prefs)
-                webdriver.DesiredCapabilities.CHROME['loggingPrefs'] = {'driver': 'OFF', 'server': 'OFF', 'browser': 'OFF'}
+                options.add_argument("start-maximized")
+                options.add_experimental_option("excludeSwitches", ["enable-automation"])
+                options.add_argument("--disable-blink-features=AutomationControlled")
             try:
                 driver = webdriver.Chrome(executable_path=path, options=options)
             except TypeError:
@@ -96,6 +118,7 @@ class Driver:
             except Exception as error:
                 sys.exit(colored("[-] ", "red")+f" {error}")
             else:
+                self.driver_navigator(driver)
                 driver.get("https://selmi.tech")
                 return driver
         else:
