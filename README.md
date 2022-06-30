@@ -5,7 +5,7 @@ This program will download and patch a Chrome driver to make it undetectable. So
 
 ## Passed the antibot test [](https://bot.sannysoft.com)
 
-![](screenshots/antibot-tested.png)
+![](lucd/screenshots/antibot-tested.png)
 
 ## What it does:
 
