@@ -12,10 +12,9 @@ init()
 from selenium.webdriver.common.keys import Keys
 
 
-from .clean import Clean
 from .utils import Util
 
-clean = Clean()
+
 util = Util()
 
 class Driver:
@@ -86,9 +85,6 @@ class Driver:
     def create_driver(self, headless=False, profile_path="", mute=False, debugging=False, default_profile=False, debug_port=9222, control_existing_instance=False):
         from .check import get_installed_chrome_path
         path = get_installed_chrome_path()
-        os.chmod(path, 755)
-        if not path:
-            clean.remove_signature_in_javascript()
         if path is not None:
             options = webdriver.ChromeOptions()
             options.headless = headless
@@ -109,7 +105,6 @@ class Driver:
                     options.add_argument("--mute-audio")
                     options.add_argument('--no-sandbox')
                 options.add_argument("start-maximized")
-                options.add_experimental_option("excludeSwitches", ["enable-automation"])
                 options.add_argument("--disable-blink-features=AutomationControlled")
             try:
                 driver = webdriver.Chrome(executable_path=path, options=options)

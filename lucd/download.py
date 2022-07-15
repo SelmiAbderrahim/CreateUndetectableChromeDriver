@@ -33,6 +33,41 @@ class Download:
     else:
         system = "mac"
 
+    def update_binary(self, path):
+        word = "cdc_".encode()
+        new = "tch_".encode()
+        while True:
+            string = b""
+            Flag = 0
+            with open(path, 'r+b') as file:
+                pos = 0
+                data = string = file.read(1)
+                while data:
+                    data = file.read(1)
+                    if data == b" ":
+                        if word in string:
+                            new_tring = string.decode().replace(word.decode(), new.decode())
+                            file.seek(pos)
+                            file.write(new_tring.encode())
+                            Flag = 1
+                            break
+                        else:
+                            pos = file.tell()
+                            data = string = file.read(1)
+                    else:
+                        string += data
+                        continue
+            if not Flag:
+                break
+
+    def remove_signature_in_javascript(self, path):
+        os.chmod(path, 755)
+        with open(path, "r", errors="ignore") as chrome:
+            content = chrome.read()
+        content = content.replace("cdc_", "tch_")   
+        self.update_binary(path)
+
+
     def check_installed_chrome_version(self):
         try:
             if OSNAME == "Windows":
@@ -123,5 +158,5 @@ class Download:
         chromedriver_path = os.path.join(DRIVER, filename)
         util.update_chrome_driver_config(chromedriver=chromedriver_path)
         
-
+        self.remove_signature_in_javascript(chromedriver_path)
         return filename
