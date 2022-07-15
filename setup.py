@@ -20,12 +20,9 @@ setup(
             "colorama==0.4.4",
             "requests==2.27.1",
             "termcolor==1.1.0",
-            "lxml==4.8.0",
+            "lxml==4.9.1",
             "selenium==4.1.5",
             "fake-useragent==0.1.11",
-        ],
-        install_requires=[
-            'lxml>=4.9.1'
         ],
         packages=['lucd', 'lucd.screenshots'],
         keywords=['python', 'undetectable', "chrome", "selenium", "webdriver"],
