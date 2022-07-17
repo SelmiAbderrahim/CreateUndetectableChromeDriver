@@ -1,10 +1,8 @@
 import requests
-import shutil
 import os
 import platform
 import subprocess
 import re
-import time
 import zipfile
 from pathlib import Path
 from bs4 import BeautifulSoup
@@ -60,7 +58,10 @@ class Download(Util):
                 break
 
     def remove_signature_in_javascript(self, path):
-        os.chmod(path, 755)
+        if OSNAME == "Windows":
+            os.chmod(path, 755)
+        else:
+            subprocess.Popen(f"sudo chmod 777 {path}", stdout=subprocess.PIPE, shell=True)
         with open(path, "r", errors="ignore") as chrome:
             content = chrome.read()
         content = content.replace("cdc_", "tch_")   
