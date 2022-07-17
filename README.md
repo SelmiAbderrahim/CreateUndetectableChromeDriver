@@ -59,13 +59,17 @@ chrome.get("https://selmi.tech")
 
 ### Tests
 
-Tested on:
+Install pytest:
 
-        ✅ Windows
+```
+pip install pytest
+```
 
-        ✅ Linux
+Run the pytest script:
 
-        ❌ Mac
+```
+pytest lucd/tests/
+```
 
 ---
 

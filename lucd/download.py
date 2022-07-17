@@ -16,11 +16,10 @@ from .utils import Util
 
 OSNAME = platform.system()
 init()
-util = Util()
 DRIVER = Path(__file__).resolve().absolute().parent / "driver"
 
 
-class Download:
+class Download(Util):
     """
     It will get the installed Chrome driver and based on the operating system
     it will download the compatible chromedriver.
@@ -115,7 +114,7 @@ class Download:
                 + colored(installed_chrome_version, "blue")
                 + " installed."
             )
-            util.update_chrome_driver_config(version=installed_chrome_version)
+            self.update_chrome_driver_config(version=installed_chrome_version)
             return installed_chrome_version
 
     def get_chrome_driver_download_link(self, version):
@@ -142,7 +141,7 @@ class Download:
         with requests.get(download_link, stream=True, headers=headers) as r:
             print("downloading " + colored(f"{chrome_file_name}", "blue") + " ...")
             with open(os.path.join(DRIVER, chrome_file_name), "wb") as f:
-                shutil.copyfileobj(r.raw, f)
+                shself.copyfileobj(r.raw, f)
         
         return chrome_driver_file
 
@@ -156,7 +155,7 @@ class Download:
         os.remove(path)
         print(colored("[+]", "green") + " Chrome driver has been installed.")
         chromedriver_path = os.path.join(DRIVER, filename)
-        util.update_chrome_driver_config(chromedriver=chromedriver_path)
+        self.update_chrome_driver_config(chromedriver=chromedriver_path)
         
         self.remove_signature_in_javascript(chromedriver_path)
         return filename

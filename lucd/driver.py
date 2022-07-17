@@ -1,5 +1,5 @@
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.chrome.service import Service
 import random
 import os
 import platform
@@ -15,9 +15,7 @@ from selenium.webdriver.common.keys import Keys
 from .utils import Util
 
 
-util = Util()
-
-class Driver:
+class Driver(Util):
 
     def generate_user_agent(self):
         try:
@@ -73,7 +71,7 @@ class Driver:
         if system == 'Windows':
             os.system('start cmd /k ' + command)
         else:
-            google = util.whereis_google_chrome()
+            google = self.whereis_google_chrome()
             if not google:
                 raise Exception("whereis: Google Chrome is not installed")
             if default_profile:
@@ -107,9 +105,9 @@ class Driver:
                 options.add_argument("start-maximized")
                 options.add_argument("--disable-blink-features=AutomationControlled")
             try:
-                driver = webdriver.Chrome(executable_path=path, options=options)
-            except TypeError:
                 driver = webdriver.Chrome(service=Service(path), options=options)
+            except TypeError:
+                driver = webdriver.Chrome(executable_path=path, options=options)
             except Exception as error:
                 sys.exit(colored("[-] ", "red")+f" {error}")
             else:

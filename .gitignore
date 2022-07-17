@@ -7,3 +7,5 @@ lucd/driver
 requirements.txt
 dist
 *.egg-info
+.coverage
+.*_cache
