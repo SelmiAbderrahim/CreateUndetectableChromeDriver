@@ -27,7 +27,7 @@ setup(
         packages=['lucd', 'lucd.screenshots', 'lucd.tests'],
         keywords=['python', 'undetectable', "chrome", "selenium", "webdriver"],
         classifiers= [
-            "Development Status :: Beta",
+            "Development Status :: 4 - Beta",
             "Programming Language :: Python :: 3",
             "Operating System :: Microsoft :: Windows",
         ],
