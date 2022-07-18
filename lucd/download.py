@@ -1,3 +1,4 @@
+import shutil
 import requests
 import os
 import platform
@@ -142,7 +143,7 @@ class Download(Util):
         with requests.get(download_link, stream=True, headers=headers) as r:
             print("downloading " + colored(f"{chrome_file_name}", "blue") + " ...")
             with open(os.path.join(DRIVER, chrome_file_name), "wb") as f:
-                shself.copyfileobj(r.raw, f)
+                shutil.copyfileobj(r.raw, f)
         
         return chrome_driver_file
 
