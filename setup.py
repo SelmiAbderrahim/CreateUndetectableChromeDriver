@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import setuptools
 
 VERSION = '0.2.0' 
 DESCRIPTION = 'Create Local Undetectable Chrome Driver'
@@ -24,7 +25,7 @@ setup(
             "selenium==4.1.5",
             "fake-useragent==0.1.11",
         ],
-        packages=['lucd', 'lucd.*'],
+        packages=setuptools.find_packages(),
         keywords=['python', 'undetectable', "chrome", "selenium", "webdriver"],
         classifiers= [
             "Development Status :: 4 - Beta",
