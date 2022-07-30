@@ -24,7 +24,7 @@ setup(
             "selenium==4.1.5",
             "fake-useragent==0.1.11",
         ],
-        packages=['lucd', 'lucd.README.md'],
+        packages=['lucd', 'lucd.*'],
         keywords=['python', 'undetectable', "chrome", "selenium", "webdriver"],
         classifiers= [
             "Development Status :: 4 - Beta",
