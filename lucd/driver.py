@@ -25,6 +25,17 @@ class Driver(Base, PreLaunch):
     Returns
         None
     """
+    def __init__(self):
+        super().__init__()
+        self._useragent = self.generate_user_agent()
+
+    @property
+    def useragent(self):
+        return self._useragent
+
+    @useragent.setter
+    def useragent(self, value: str):
+        self._useragent = value
 
     def create(self):
         path = get_installed_chrome_path()
@@ -39,7 +50,7 @@ class Driver(Base, PreLaunch):
                 "excludeSwitches", ["enable-automation", 'enable-logging']
             )
             options.add_argument("--disable-blink-features=AutomationControlled")
-            options.add_argument(f"user-agent={self.generate_user_agent()}")
+            options.add_argument(f"user-agent={self.useragent}")
             options.add_argument("--no-sandbox")
             if self.mute:
                 options.add_argument("--mute-audio")
