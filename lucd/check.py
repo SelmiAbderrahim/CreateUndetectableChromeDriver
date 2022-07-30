@@ -1,11 +1,10 @@
 import os
-import sys
 import json
 from pathlib import Path
-
 from .download import Download
-DRIVER = Path(__file__).resolve().absolute().parent / "driver"
 
+
+DRIVER = Path(__file__).resolve().absolute().parent / "driver"
 download = Download()
 
 

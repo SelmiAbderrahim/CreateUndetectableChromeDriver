@@ -4,7 +4,6 @@ __pycache__
 env
 lucd/driver
 *.log
-requirements.txt
 dist
 *.egg-info
 .coverage

@@ -5,13 +5,13 @@ import platform
 import subprocess
 import re
 import zipfile
+from random import choices
 from pathlib import Path
 from bs4 import BeautifulSoup
 from termcolor import colored
 from colorama import init
-
-
 from .utils import Util
+
 
 OSNAME = platform.system()
 init()
@@ -23,7 +23,6 @@ class Download(Util):
     It will get the installed Chrome driver and based on the operating system
     it will download the compatible chromedriver.
     """
-
     if OSNAME == "Windows":
         system = "win"
     elif OSNAME == "Linux":
@@ -31,9 +30,11 @@ class Download(Util):
     else:
         system = "mac"
 
-    def update_binary(self, path):
+    def update_binary(self, path: Path):
         word = "cdc_".encode()
-        new = "tch_".encode()
+        new = (("".join(
+            choices(['a', 'b', 'c', 'd', 'f', 'g'], k=3))
+        ) + "_").encode()
         while True:
             string = b""
             Flag = 0
@@ -58,16 +59,12 @@ class Download(Util):
             if not Flag:
                 break
 
-    def remove_signature_in_javascript(self, path):
+    def remove_signature_in_javascript(self, path: Path):
         if OSNAME == "Windows":
             os.chmod(path, 755)
         else:
-            subprocess.Popen(f"sudo chmod 777 {path}", stdout=subprocess.PIPE, shell=True)
-        with open(path, "r", errors="ignore") as chrome:
-            content = chrome.read()
-        content = content.replace("cdc_", "tch_")   
+            subprocess.Popen(f"sudo chmod 755 {path}", stdout=subprocess.PIPE, shell=True)
         self.update_binary(path)
-
 
     def check_installed_chrome_version(self):
         try:
@@ -101,19 +98,19 @@ class Download(Util):
                 )
         except Exception as error:
             print(
-                colored("X [Error]", "red")
+                colored("X [Error]", "red")\
                 + " We couldn't find the version of the installed chrome browser."
             )
             print(f"--> {error}")
             return None
         else:
             installed_chrome_version = re.findall(
-                    r"([\d]+\.[\d]+\.[\d]+\.[\d]+)", cmd_version_output
-                )[0].split(".")[0]
+                r"([\d]+\.[\d]+\.[\d]+\.[\d]+)", cmd_version_output
+            )[0].split(".")[0]
             print(
-                colored("[+]", "green")
-                + " You have Chrome version "
-                + colored(installed_chrome_version, "blue")
+                colored("[+]", "green")\
+                + " You have Chrome version "\
+                + colored(installed_chrome_version, "blue")\
                 + " installed."
             )
             self.update_chrome_driver_config(version=installed_chrome_version)
@@ -122,7 +119,10 @@ class Download(Util):
     def get_chrome_driver_download_link(self, version):
         base_url = "https://chromedriver.storage.googleapis.com"
         headers = {
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+            "user-agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+                " (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+            )
         }
         response = requests.get(base_url, headers=headers)
         content = response.content.decode("utf-8")
@@ -136,7 +136,10 @@ class Download(Util):
     def download_chrome_driver(self, chrome_driver_file):
         base_url = "https://chromedriver.storage.googleapis.com"
         headers = {
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+            "user-agent": (
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+                " (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+            )
         }
         download_link = base_url + "/" + chrome_driver_file
         chrome_file_name = chrome_driver_file.split("/")[1]
@@ -144,7 +147,6 @@ class Download(Util):
             print("downloading " + colored(f"{chrome_file_name}", "blue") + " ...")
             with open(os.path.join(DRIVER, chrome_file_name), "wb") as f:
                 shutil.copyfileobj(r.raw, f)
-        
         return chrome_driver_file
 
     def extract_chrome_driver_zip(self, chrome_driver_file):
@@ -158,6 +160,5 @@ class Download(Util):
         print(colored("[+]", "green") + " Chrome driver has been installed.")
         chromedriver_path = os.path.join(DRIVER, filename)
         self.update_chrome_driver_config(chromedriver=chromedriver_path)
-        
         self.remove_signature_in_javascript(chromedriver_path)
         return filename
