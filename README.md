@@ -34,7 +34,7 @@ pip install lucd
 or 
 
 ```
-pip install git+https://github.com/SelmiAbderrahim/CreateUndetectableChromeDriver/blob/master/lucd/screenshots/antibot-tested.png
+pip install git+https://github.com/SelmiAbderrahim/CreateUndetectableChromeDriver
 ```
 <br><br>
 # Example
